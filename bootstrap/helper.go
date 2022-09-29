@@ -23,6 +23,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+	urlparse "net/url"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
@@ -52,7 +53,29 @@ func Encode(enc *base64.Encoding, str string) string {
 	return string(data)
 }
 
+func DropSubFolder(url *string) {
+	u, err := urlparse.Parse(*url)
+	if (err != nil) {
+		logs.Alert("Parse url fail!:", err)
+		return
+	}
+	if len(u.Path) > 0 {
+		n := len(*url)
+		rs := []rune(*url)
+		*url = string(rs[0 : n - len(u.Path)])
+	}
+}
+
 func FormatSoftLink(url *string) {
+	n := len(*url)
+	rs := []rune(*url)
+	if strings.HasSuffix(*url, "/") {
+		*url = string(rs[0 : n-1])
+	}
+	if !strings.HasPrefix(*url, "/") {
+		*url = "/"+ *url
+	}
+	/*
 	n := len(*url)
 	rs := []rune(*url)
 	s := string(rs[n-1 : n])
@@ -63,12 +86,19 @@ func FormatSoftLink(url *string) {
 	if s != "/" {
 		*url = "/" + string(rs[0:n])
 	}
+	*/
 }
 
 func FormatStoreLocation(location *string) {
+	if !strings.HasSuffix(*location, "/") {
+		*location += "/"
+	}
 	n := len(*location)
 	rs := []rune(*location)
-	s := string(rs[n-1 : n])
+	if strings.HasPrefix(*location, "/") {
+		*location = string(rs[1:n])
+	}
+	/*
 	if s != "/" {
 		*location += "/"
 	}
@@ -76,6 +106,7 @@ func FormatStoreLocation(location *string) {
 	if s == "/" {
 		*location = string(rs[1:n])
 	}
+	*/
 }
 
 func GetRandomString(l int, str string) string {
@@ -102,8 +133,15 @@ func CheckPath(path string) {
 
 //格式化 url
 func FormatUrl(url *string) {
+	if !strings.HasSuffix(*url, "/") {
+		*url += "/"
+	}
 	n := len(*url)
 	rs := []rune(*url)
+	if strings.HasPrefix(*url, "/") {
+		*url = string(rs[1:n])
+	}
+	/*
 	s := string(rs[n-1 : n])
 	if s != "/" {
 		*url += "/"
@@ -112,6 +150,7 @@ func FormatUrl(url *string) {
 	if s == "/" {
 		*url = string(rs[1:n])
 	}
+	*/
 }
 
 //获取图片后G缀

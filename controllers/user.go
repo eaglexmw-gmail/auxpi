@@ -32,6 +32,12 @@ type UsersController struct {
 }
 
 func (u *UsersController) commonStyle() {
+	var site = auxpi.SiteBase{}
+	err := site.UnmarshalJSON([]byte(models.GetOption("site_base", "conf")))
+	if err != nil {
+		auxpiLog.SetAWarningLog("CONTROLLER", err)
+	}
+
 	u.LayoutSections = make(map[string]string)
 	u.LayoutSections["Script"] = "user/user_script.tpl"
 	u.LayoutSections["Header"] = "user/user_header.tpl"
@@ -42,6 +48,9 @@ func (u *UsersController) commonStyle() {
 	if r == "admin" {
 		u.Data["IsAdmin"] = true
 	}
+
+	u.Data["siteName"] = site.SiteName
+	u.Data["siteUrl"] = site.SiteUrl
 }
 
 func (u *UsersController) Show() {

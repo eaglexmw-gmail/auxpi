@@ -3628,6 +3628,8 @@ func easyjsonB926644bDecodeGithubComAuxpiAuxpiAll25(in *jlexer.Lexer, out *Local
 		switch key {
 		case "status":
 			out.Status = bool(in.Bool())
+		case "root_link":
+			out.RootLink = bool(in.Bool())
 		case "storage_location":
 			out.StorageLocation = string(in.String())
 		case "link":
@@ -3648,6 +3650,16 @@ func easyjsonB926644bEncodeGithubComAuxpiAuxpiAll25(out *jwriter.Writer, in Loca
 	_ = first
 	{
 		const prefix string = ",\"status\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Bool(bool(in.Status))
+	}
+	{
+		const prefix string = ",\"root_link\":"
 		if first {
 			first = false
 			out.RawString(prefix[1:])

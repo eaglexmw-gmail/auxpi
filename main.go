@@ -114,6 +114,7 @@ func init() {
 		dbName string
 		dbUser string
 		dbPass string
+		siteurl string
 	)
 
 	flag.StringVar(&user, "name", "auxpi-admin", "Admin UserName")
@@ -123,6 +124,7 @@ func init() {
 	flag.StringVar(&dbName, "dbName", "auxpi", "dataBase Name")
 	flag.StringVar(&dbUser, "dbUser", "root", "dataBase UserName")
 	flag.StringVar(&dbPass, "dbPass", "root", "dataBase PassWord")
+	flag.StringVar(&siteurl, "siteUrl", "https://yoursite.com/auxpi", "Your Site Url")
 	flag.Parse()
 	t := utils.GetSha256CodeWithSalt("auxpiauxpi")
 
@@ -134,6 +136,26 @@ func init() {
 		}
 		models.RegisterAdmin(user, utils.GetSha256CodeWithSalt(pass), t, email)
 		fmt.Println("\033[32m[INFO]:\033[0m Create Admin SUCCESS")
+	case "siteurl":
+		var site = auxpi.SiteBase{}
+		err := site.UnmarshalJSON([]byte(models.GetOption("site_base", "conf")))
+		if err != nil {
+			fmt.Println("\033[31m[ERROR]:\033[0m get site_base conf fail, use default value.")
+			site.SiteName = "AuXpI API 图床"
+			site.SiteUrl = "http://yoursite.com/"
+			site.SiteFooter = "新一代图床"
+			site.Logo = "/static/app/images/logo.jpg"
+			site.SiteUploadMaxSize = 5
+			site.SiteUploadMaxNumber = 10
+			site.AllowTourists = false
+			site.AllowRegister = false
+			site.JwtSecret = bootstrap.GenerateUniqueString()
+			site.JwtDueTime = 3
+			site.MailConfig.Status = false
+		}
+		site.SiteUrl = siteurl
+		models.UpdateOption("site_base", site, "conf");
+		fmt.Println("\033[32m[INFO]:\033[0m Change SiteUrl SUCCESS")
 	case "migrate":
 		if dbName == "" && dbUser == "" && dbPass == "" {
 			fmt.Println("\033[31m[ERROR]:\033" + "dbName,dbUser,dbPass can't be empty")

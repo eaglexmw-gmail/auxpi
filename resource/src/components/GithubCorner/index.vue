@@ -1,5 +1,5 @@
 <template>
-  <a href="https://github.com/aimerforreimu/AUXPI" target="_blank" class="github-corner" aria-label="View source on Github">
+  <a href="https://github.com/eaglexmw-gmail/AUXPI" target="_blank" class="github-corner" aria-label="View source on Github">
     <svg
       width="80"
       height="80"

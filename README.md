@@ -84,6 +84,39 @@ https://github.com/aimerforreimu/AUXPI/wiki/%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE
 密码:admin123
 邮箱:auxpi@0w0.tn
 ```
+### 全新安装后的初始化
+
+全新安装后，需要进行一些初始化步骤，AuXPI才能正常工作，以下步骤是将AuXPI部署到https://www.example.com/auxpi/为例（如果是https://www.example.com/，则不需要第4步）
+
+1. 配置中使用sqlite数据库，全新安装后，进入auxpi程序所在目录，执行如下初始流程
+```bash
+mkdir db
+./auxpi init
+./auxpi migrate
+```
+2. 然后添加一个管理员帐号：admin，邮箱为：admin@w0.cn，密码为123456789
+```bash
+./auxpi -mod=admin -name=admin -email=admin@w0.cn -pass=123456789
+```
+
+3. 修改数据库中的SiteUrl
+```bash
+./auxpi -siteUrl=https://www.example.com/auxpi/ -mod=siteurl
+```
+
+4. 修改static/app/js/config.js
+
+内容修改为：
+```javascript
+window.sub_folder='/auxpi';
+```
+
+5. 进入管理后台，调整本地图床配置（非必须）
+
+打开https://www.example.com/auxpi/admin/，输入前面的管理员帐号，配置本地图床的路径、软链接等信息。
+
+6. 修改conf/app.conf的运行模式为prod
+
 ## 分发原理
 
 ![流程图](https://ae01.alicdn.com/kf/HTB1ikH2TY2pK1RjSZFs761NlXXaN.png)

@@ -44,24 +44,29 @@ func (s *Local) Upload(image *ImageParam) (ImageReturn, error) {
 		return ImageReturn{}, err
 	}
 
-	host := &site.SiteUrl
-	storeLocation := &local.StorageLocation
-	softLink := &local.Link
+	host := site.SiteUrl
+	// 软链接拼接URL时，是否以根目录形式拼接，以子目录部署时，此选项如果为TRUE，将会去除SiteUrl的子目录
+	if local.RootLink {
+		//修正URL
+		bootstrap.DropSubFolder(&host)
+	}
+	storeLocation := local.StorageLocation
+	softLink := local.Link
 	//修正URL
-	bootstrap.FormatUrl(softLink)
-	bootstrap.FormatUrl(host)
-	bootstrap.FormatUrl(storeLocation)
+	bootstrap.FormatUrl(&softLink)
+	bootstrap.FormatUrl(&host)
+	bootstrap.FormatUrl(&storeLocation)
 
-	suffix := s.storeImage(*storeLocation, image.Name, *image.Content)
-	url := *host + *softLink + suffix
+	suffix := s.storeImage(storeLocation, image.Name, *image.Content)
+	url := host + softLink + suffix
 	beego.Alert(url)
-	backup := *host + "backup/" + suffix
+	backup := host + "backup/" + suffix
 	str := `ZXCVBNMASDFGHJKLQWERTYUIOPzxcvbnmasdfghjklqwertyuiop1234567890`
 	randomStr := bootstrap.GetRandomString(16, str)
 	return ImageReturn{
 		Url:    url,
 		Delete: randomStr,
-		Path:   *storeLocation + suffix,
+		Path:   storeLocation + suffix,
 		Other:  backup,
 		ID:     12,
 	}, nil

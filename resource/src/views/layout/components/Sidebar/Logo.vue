@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       title: 'Auxpi Admin',
-      logo: 'http://localhost:2333/images/2019/05/03/AKjLNSkZUUawHgnh.png'
+      logo: window.sub_folder + '/static/app/images/logo.jpg'
     }
   }
 }

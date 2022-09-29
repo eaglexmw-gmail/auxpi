@@ -43,7 +43,7 @@ func init() {
 //代码冗余，但是使用 API 会造成不必要的消耗
 func (w *WebUpLoadController) UpLoadHandle() {
 	//获取用户信息
-	userId, _ := strconv.Atoi(w.Ctx.GetCookie("id"))
+	userId, _ := strconv.Atoi(w.Ctx.GetCookie("AuXPI_id"))
 	ip := w.Ctx.Input.IP()
 	//获取上传类型
 	apiSelect := w.GetString("apiSelect")

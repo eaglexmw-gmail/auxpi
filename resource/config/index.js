@@ -62,7 +62,7 @@ module.exports = {
          * In most cases please use '/' !!!
          */
         //assetsPublicPath: '/',
-        assetsPublicPath: '/static/app/admin/',
+        assetsPublicPath: './static/app/admin/',
 
         /**
          * Source Maps

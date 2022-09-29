@@ -41,7 +41,7 @@
             </button>
         </div>
         <div class="mt-4 text-center">
-            已经有账户啦? <a href="/login">登录</a>
+            已经有账户啦? <a href="./login">登录</a>
         </div>
     </form>
 </div>

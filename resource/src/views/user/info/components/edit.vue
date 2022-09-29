@@ -469,7 +469,7 @@ export default {
         return
       }
 
-      this.ws = new WebSocket('ws://' + 'localhost:2333' + '/api/test/ws/sync')
+      this.ws = new WebSocket('ws://' + 'localhost:2333' + '/api/ws/sync')
 
       this.syncImageInfo = []
       const Count = this.checkedImages.length

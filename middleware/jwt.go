@@ -14,7 +14,7 @@
 package middleware
 
 import (
-	"fmt"
+	//"fmt"
 	"time"
 
 	"github.com/auxpi/auxpiAll"
@@ -31,7 +31,7 @@ var JWT = func(ctx *context.Context) {
 
 	code = e.SUCCESS
 	token = ctx.Request.Header.Get("X-Token")
-	fmt.Println("JWJWJWJWJWJTTTTTTTTTTTTTTTTTT")
+	//fmt.Println("JWJWJWJWJWJTTTTTTTTTTTTTTTTTT")
 	if token == "" {
 		code = e.INVALID_PARAMS
 	} else {

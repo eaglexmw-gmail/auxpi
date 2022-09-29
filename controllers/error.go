@@ -31,9 +31,11 @@ func (e *ErrorController) commonStyle() {
 	e.Layout = "auth/base.tpl"
 	e.TplName = "auth/base.tpl"
 	e.Data["SiteName"] = site.SiteName
+	e.Data["SiteUrl"] = site.SiteUrl
 	e.Data["Time"] = beego.Date(time.Now(), "Y")
 	e.Data["SiteLink"] = site.SiteUrl
-	e.Data["Logo"] = site.Logo
+	// 使用相对路径
+	e.Data["Logo"] = "." + site.Logo
 }
 
 type UserMsg struct {

@@ -92,9 +92,9 @@ func (i *PagesController) LocalShow() {
 
 func (i *PagesController) AboutShow() {
 	i.commonStyle()
-	i.Data["siteName"] = bootstrap.SiteConfig.SiteName
-	i.Data["siteUrl"] = bootstrap.SiteConfig.SiteUrl
-	i.Data["siteFooterText"] = bootstrap.SiteConfig.SiteFooter
+	//i.Data["siteName"] = bootstrap.SiteConfig.SiteName
+	//i.Data["siteUrl"] = bootstrap.SiteConfig.SiteUrl
+	//i.Data["siteFooterText"] = bootstrap.SiteConfig.SiteFooter
 	i.Data["title"] = "关于" + bootstrap.SiteConfig.SiteName
 	i.Layout = "layouts/app.tpl"
 	i.TplName = "about/about-me.tpl"

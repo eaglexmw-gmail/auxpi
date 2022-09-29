@@ -156,6 +156,7 @@ func init() {
 		//upload way Init
 		//本地储存
 		siteconfig.SiteUploadWay.LocalStore.Status = true
+		siteconfig.SiteUploadWay.LocalStore.RootLink = true
 		siteconfig.SiteUploadWay.LocalStore.Link = "/images"
 		siteconfig.SiteUploadWay.LocalStore.StorageLocation = "public/upload"
 
@@ -184,10 +185,10 @@ func init() {
 		siteconfig.DbOption.TablePrefix = "auxpi_"
 
 		//Auxpi Info
-		siteconfig.AuxpiInfo.Author = "aimerforreimu"
+		siteconfig.AuxpiInfo.Author = "aimerforreimu;eaglexmw"
 		siteconfig.AuxpiInfo.Branch = "dev"
 		siteconfig.AuxpiInfo.Version = "2.0"
-		siteconfig.AuxpiInfo.Repositories = "https://github.com/aimerforreimu/AUXPI"
+		siteconfig.AuxpiInfo.Repositories = "https://github.com/eaglexmw-gmail/AUXPI"
 
 		configJson, err := siteconfig.MarshalJSON()
 		if err != nil {

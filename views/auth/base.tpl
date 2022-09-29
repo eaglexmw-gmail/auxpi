@@ -7,7 +7,7 @@
         <div class="row justify-content-md-center align-items-center h-100">
             <div class="card-wrapper">
                 <div class="brand">
-                    {{/*/static/app/images/logo.jpg*/}}
+                    {{/*./static/app/images/logo.jpg*/}}
                     <a href="{{ .SiteLink}}" target="_blank"><img src="{{ .Logo}}" alt="{{ .SiteName}}"></a>
                 </div>
                 <div class="card fat">

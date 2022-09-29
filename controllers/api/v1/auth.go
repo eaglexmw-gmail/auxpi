@@ -76,10 +76,12 @@ func (a *Auth) commonStyle() {
 	a.Data["xsrf_token"] = a.XSRFToken()
 	a.Layout = "auth/base.tpl"
 	a.TplName = "auth/base.tpl"
+	a.Data["siteUrl"] = site.SiteUrl
 	a.Data["SiteName"] = site.SiteName
 	a.Data["Time"] = beego.Date(time.Now(), "Y")
 	a.Data["SiteLink"] = site.SiteUrl
-	a.Data["Logo"] = site.Logo
+	// 使用相对路径
+	a.Data["Logo"] = "." + site.Logo
 }
 
 //管理员认证
@@ -155,8 +157,8 @@ func (a *Auth) Store() {
 	}
 
 	//加密密码
-	beego.Alert([]byte(userInfo.Password))
-	beego.Alert(userInfo.Password)
+	//beego.Alert([]byte(userInfo.Password))
+	//beego.Alert(userInfo.Password)
 	userInfo.Password = utils.GetSha256CodeWithSalt(userInfo.Password)
 	beego.Alert(userInfo)
 	//通过解析开始查库
@@ -177,21 +179,21 @@ func (a *Auth) Store() {
 			`_version_` + userCookie.Version
 
 		a.SetSession(sName, userCookie.AuxpiToken)
-		a.Ctx.SetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname", userCookie.UName, "/")
-		a.Ctx.SetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "email", userCookie.Email, "/")
-		a.Ctx.SetCookie("id", strconv.Itoa(user.ID), "/")
-		a.Ctx.SetCookie("v", userCookie.Version, "/")
-		a.Ctx.SetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "at", userCookie.AuxpiToken, "/")
+		a.Ctx.SetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname", userCookie.UName, "/")
+		a.Ctx.SetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_email", userCookie.Email, "/")
+		a.Ctx.SetCookie("AuXPI_id", strconv.Itoa(user.ID), "/")
+		a.Ctx.SetCookie("AuXPI_v", userCookie.Version, "/")
+		a.Ctx.SetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_at", userCookie.AuxpiToken, "/")
 
 		if user.RoleID == 1 {
 			//如果用户是管理员,则另外附加 cookie
-			a.Ctx.SetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "r", "admin", "/")
+			a.Ctx.SetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_r", "admin", "/")
 			//并且直接附加 jwt 的 cookie
 			token, err := utils.GenerateToken(userCookie.UName, userCookie.Email)
 			if err != nil {
 				auxpiLog.SetAnErrorLog("USER_LOGIN_ADMIN_JWt", err)
 			}
-			a.Ctx.SetCookie("Admin-Token", token, "/")
+			a.Ctx.SetCookie("AuXPI_Admin-Token", token, "/")
 		}
 
 		if a.Ctx.Input.IsAjax() {
@@ -204,7 +206,7 @@ func (a *Auth) Store() {
 			return
 		}
 
-		a.Redirect("/user/index", http.StatusFound)
+		a.Redirect(site.SiteUrl + "/user/index", http.StatusFound)
 		return
 	}
 
@@ -219,17 +221,17 @@ func (a *Auth) Store() {
 
 //用户执行退出
 func (a *Auth) Destroy() {
-	sid := a.Ctx.GetCookie("id")
+	sid := a.Ctx.GetCookie("AuXPI_id")
 	id, _ := strconv.Atoi(sid)
-	at, _ := a.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "at")
-	un, _ := a.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
-	em, _ := a.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "email")
+	at, _ := a.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_at")
+	un, _ := a.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname")
+	em, _ := a.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_email")
 
 	var userCookie = auxpi.AuxpiCookie{
 		UName:      un,
 		Email:      em,
 		ID:         id,
-		Version:    a.Ctx.GetCookie("v"),
+		Version:    a.Ctx.GetCookie("AuXPI_v"),
 		AuxpiToken: at,
 	}
 
@@ -240,19 +242,20 @@ func (a *Auth) Destroy() {
 
 	a.DelSession(sName)
 
-	a.Ctx.SetCookie("uname", "", -1)
-	a.Ctx.SetCookie("email", "", -1)
-	a.Ctx.SetCookie("id", "", -1)
-	a.Ctx.SetCookie("v", "", -1)
-	a.Ctx.SetCookie("at", "", -1)
-	a.Ctx.SetCookie("r", "", -1)
+	a.Ctx.SetCookie("AuXPI_uname", "", -1)
+	a.Ctx.SetCookie("AuXPI_email", "", -1)
+	a.Ctx.SetCookie("AuXPI_id", "", -1)
+	a.Ctx.SetCookie("AuXPI_v", "", -1)
+	a.Ctx.SetCookie("AuXPI_at", "", -1)
+	a.Ctx.SetCookie("AuXPI_r", "", -1)
 
-	if a.Ctx.GetCookie("Admin-Token") != "" {
-		a.Ctx.SetCookie("r", "", -1)
-		a.Ctx.SetCookie("Admin-Token", "", -1)
+	if a.Ctx.GetCookie("AuXPI_Admin-Token") != "" {
+		a.Ctx.SetCookie("AuXPI_r", "", -1)
+		a.Ctx.SetCookie("AuXPI_Admin-Token", "", -1)
 	}
 	beego.Alert("Logout Done")
-	a.Ctx.Redirect(302, "/")
+	a.Ctx.Redirect(302, site.SiteUrl)
+	//a.Ctx.Redirect(302, "/")
 }
 
 //用户密码找回
@@ -415,7 +418,7 @@ func (a *Auth) Register() {
 			ButtonContent: "返回首页",
 			Link:          site.SiteUrl,
 		}
-		a.Data["Part"] = "注册不允许"
+		a.Data["Part"] = "不允许注册"
 		return
 	}
 

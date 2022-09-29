@@ -7,10 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="_xsrf" content="{{.xsrf_token}}" />
     <title>{{ .siteName}} 管理</title>
+    <base href="{{.siteUrl}}" />
+    <script src="./static/app/js/config.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@0.4.2/dist/css/mdui.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7/dist/sweetalert2.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
-    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="./static/bootstrap/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="./static/favicon.ico" type="image/x-icon">
     <style type="text/css">
         a:hover{
             text-decoration:none;

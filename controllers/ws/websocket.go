@@ -28,7 +28,7 @@ func (this *WebSocketController) Join() {
 		},
 	}
 	//需要验证 cookie
-	token := this.Ctx.Input.Cookie("Admin-Token")
+	token := this.Ctx.Input.Cookie("AuXPI_Admin-Token")
 
 	_, err := utils.ParseToken(token)
 	if err != nil {

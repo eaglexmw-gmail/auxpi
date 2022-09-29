@@ -21,24 +21,34 @@ import (
 	"github.com/auxpi/auxpiAll/e"
 	"github.com/auxpi/bootstrap"
 	"github.com/auxpi/log"
+	"github.com/auxpi/models"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/validation"
 )
 
+var site = auxpi.SiteBase{}
+
+func init() {
+	err := site.UnmarshalJSON([]byte(models.GetOption("site_base", "conf")))
+	if err != nil {
+		auxpiLog.SetAWarningLog("CONTROLLER", err)
+	}
+}
+
 //未登录用户重定向
 var CookieAuthCheck = func(ctx *context.Context) {
-	sid := ctx.GetCookie("id")
+	sid := ctx.GetCookie("AuXPI_id")
 	id, _ := strconv.Atoi(sid)
-	at, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "at")
-	un, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
-	em, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "email")
+	at, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_at")
+	un, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname")
+	em, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_email")
 	var userCookie = auxpi.AuxpiCookie{
 		UName:      un,
 		Email:      em,
 		ID:         id,
-		Version:    ctx.GetCookie("v"),
+		Version:    ctx.GetCookie("AuXPI_v"),
 		AuxpiToken: at,
 	}
 	valid := validation.Validation{}
@@ -50,7 +60,7 @@ var CookieAuthCheck = func(ctx *context.Context) {
 	}
 	if !b {
 		beego.Alert(userCookie)
-		ctx.Redirect(http.StatusFound, "/login")
+		ctx.Redirect(http.StatusFound, site.SiteUrl + "/login")
 		beego.Alert("没有 Cookie")
 		return
 	}
@@ -63,7 +73,7 @@ var CookieAuthCheck = func(ctx *context.Context) {
 	token := ctx.Input.Session(sName)
 
 	if token != userCookie.AuxpiToken {
-		ctx.Redirect(http.StatusFound, "/login")
+		ctx.Redirect(http.StatusFound, site.SiteUrl + "/login")
 		return
 	}
 
@@ -71,17 +81,17 @@ var CookieAuthCheck = func(ctx *context.Context) {
 
 //已登录用户重定向
 var CookieAuthedCheck = func(ctx *context.Context) {
-	sid := ctx.GetCookie("id")
+	sid := ctx.GetCookie("AuXPI_id")
 	id, _ := strconv.Atoi(sid)
-	at, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "at")
-	un, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
-	em, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "email")
+	at, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_at")
+	un, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname")
+	em, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_email")
 
 	var userCookie = auxpi.AuxpiCookie{
 		UName:      un,
 		Email:      em,
 		ID:         id,
-		Version:    ctx.GetCookie("v"),
+		Version:    ctx.GetCookie("AuXPI_v"),
 		AuxpiToken: at,
 	}
 	valid := validation.Validation{}
@@ -101,12 +111,12 @@ var CookieAuthedCheck = func(ctx *context.Context) {
 		token := ctx.Input.Session(sName)
 
 		if token != userCookie.AuxpiToken {
-			ctx.Redirect(http.StatusFound, "/login")
+			ctx.Redirect(http.StatusFound, site.SiteUrl + "/login")
 			return
 		}
 
 		//定位到用户首页
-		ctx.Redirect(http.StatusFound, "/users/index")
+		ctx.Redirect(http.StatusFound, site.SiteUrl + "/users/index")
 
 		return
 	}
@@ -115,17 +125,17 @@ var CookieAuthedCheck = func(ctx *context.Context) {
 
 //验证 cookie 合法性
 var CookieSignCheck = func(ctx *context.Context) {
-	sid := ctx.GetCookie("id")
+	sid := ctx.GetCookie("AuXPI_id")
 	id, _ := strconv.Atoi(sid)
-	at, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "at")
-	un, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
-	em, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "email")
+	at, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_at")
+	un, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname")
+	em, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_email")
 
 	//如果全部是空，才能判定为是游客，否者直接销毁所有的 cookie 才能上传
 	if sid == "" &&
 		at == "" &&
 		un == "" &&
-		em == "" && ctx.GetCookie("v") == "" {
+		em == "" && ctx.GetCookie("AuXPI_v") == "" {
 		return
 	}
 
@@ -134,7 +144,7 @@ var CookieSignCheck = func(ctx *context.Context) {
 		UName:      un,
 		Email:      em,
 		ID:         id,
-		Version:    ctx.GetCookie("v"),
+		Version:    ctx.GetCookie("AuXPI_v"),
 		AuxpiToken: at,
 	}
 	valid := validation.Validation{}
@@ -153,7 +163,7 @@ var CookieSignCheck = func(ctx *context.Context) {
 			return
 		}
 
-		//ctx.Redirect(http.StatusFound, "/")
+		//ctx.Redirect(http.StatusFound, site.SiteUrl)
 		return
 	}
 
@@ -170,7 +180,7 @@ var CookieSignCheck = func(ctx *context.Context) {
 		if ajaxErrorResp(ctx) {
 			return
 		}
-		//ctx.Redirect(http.StatusFound, "/")
+		//ctx.Redirect(http.StatusFound, site.SiteUrl )
 		return
 	}
 
@@ -181,17 +191,17 @@ var CookieUploadControl = func(ctx *context.Context) {
 		return
 	}
 
-	sid := ctx.GetCookie("id")
+	sid := ctx.GetCookie("AuXPI_id")
 	id, _ := strconv.Atoi(sid)
-	at, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "at")
-	un, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
-	em, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "email")
+	at, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_at")
+	un, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname")
+	em, _ := ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_email")
 
 	var userCookie = auxpi.AuxpiCookie{
 		UName:      un,
 		Email:      em,
 		ID:         id,
-		Version:    ctx.GetCookie("v"),
+		Version:    ctx.GetCookie("AuXPI_v"),
 		AuxpiToken: at,
 	}
 	valid := validation.Validation{}
@@ -232,15 +242,15 @@ var CookieUploadControl = func(ctx *context.Context) {
 }
 
 func destoryCookie(ctx *context.Context) {
-	ctx.SetCookie("uname", "", -1)
-	ctx.SetCookie("email", "", -1)
-	ctx.SetCookie("id", "", -1)
-	ctx.SetCookie("v", "", -1)
-	ctx.SetCookie("at", "", -1)
+	ctx.SetCookie("AuXPI_uname", "", -1)
+	ctx.SetCookie("AuXPI_email", "", -1)
+	ctx.SetCookie("AuXPI_id", "", -1)
+	ctx.SetCookie("AuXPI_v", "", -1)
+	ctx.SetCookie("AuXPI_at", "", -1)
 
-	if ctx.GetCookie("Admin-Token") != "" {
-		ctx.SetCookie("r", "", -1)
-		ctx.SetCookie("Admin-Token", "", -1)
+	if ctx.GetCookie("AuXPI_Admin-Token") != "" {
+		ctx.SetCookie("AuXPI_r", "", -1)
+		ctx.SetCookie("AuXPI_Admin-Token", "", -1)
 	}
 }
 

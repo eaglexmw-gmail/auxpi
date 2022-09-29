@@ -1,7 +1,7 @@
-<script src="/static/clipboard.js/2.0.1/clipboard.min.js"></script>
-<script src="/static/bootstrap-fileinput/4.5.1/js/fileinput.min.js"></script>
-<script src="/static/bootstrap-fileinput/4.5.1/js/locales/zh.js"></script>
-<script src="/static/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="./static/clipboard.js/2.0.1/clipboard.min.js"></script>
+<script src="./static/bootstrap-fileinput/4.5.1/js/fileinput.min.js"></script>
+<script src="./static/bootstrap-fileinput/4.5.1/js/locales/zh.js"></script>
+<script src="./static/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
 
     var clipboard = new ClipboardJS('.copy', {
@@ -19,7 +19,7 @@
     });
 
     $("#image").fileinput({
-        uploadUrl: "{{ urlfor "WebUpLoadController.UpLoadHandle"}}",
+        uploadUrl:  window.sub_folder + "{{ urlfor "WebUpLoadController.UpLoadHandle"}}",
         language: "zh",
         uploadAsync: true,
         overwriteInitial: false,

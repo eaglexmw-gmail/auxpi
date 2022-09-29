@@ -9,16 +9,18 @@
     <meta name="keywords" content="{{.siteName}} ,新浪图床,搜狗图床,API图床,图片上传"/>
     <meta name="description" content="{{.siteName}} 新浪图床，搜狗图床，图片上传，API 图床"/>
     <title>{{ .siteName}}</title>
-    <link href="/static/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/bootstrap-fileinput/4.5.1/css/fileinput.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/static/app/iconfont/iconfont.css">
-    <link rel="stylesheet" href="/static/mdui/0.4.1/css/mdui.min.css">
-    <link rel="stylesheet" href="/static/app/css/app.css">
-    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <base href="{{.siteUrl}}" />
+    <script src="./static/app/js/config.js"></script>
+    <link href="./static/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./static/bootstrap-fileinput/4.5.1/css/fileinput.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="stylesheet" href="./static/app/iconfont/iconfont.css">
+    <link rel="stylesheet" href="./static/mdui/0.4.1/css/mdui.min.css">
+    <link rel="stylesheet" href="./static/app/css/app.css">
+    <link rel="shortcut icon" href="./static/favicon.ico" type="image/x-icon">
 
     <!--[if IE]>
-    <script>window.location.href = '/compatibility.html';</script>
+    <script>window.location.href = './compatibility.html';</script>
     <![endif]-->
 </head>
 <body class="mdui-theme-accent-indigo mdui-appbar-with-toolbar ">
@@ -36,9 +38,9 @@
 {{ .Footer}}
 
 </body>
-<script src="/static/jquery/3.3.1/jquery.min.js"></script>
-<script src="/static/mdui/0.4.1/js/mdui.min.js"></script>
-<script src="/static/app/js/app.js"></script>
+<script src="./static/jquery/3.3.1/jquery.min.js"></script>
+<script src="./static/mdui/0.4.1/js/mdui.min.js"></script>
+<script src="./static/app/js/app.js"></script>
 
 {{ .Scripts}}
 </html>

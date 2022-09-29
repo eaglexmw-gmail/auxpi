@@ -11,7 +11,7 @@
 
         <div class="form-group">
             <label for="password">密码
-                <a href="/forgot" class="float-right">
+                <a href="./forgot" class="float-right">
                     忘记密码?
                 </a>
             </label>
@@ -34,7 +34,7 @@
             </button>
         </div>
         <div class="mt-4 text-center">
-            没有账号? <a href="/register">创建一个</a>
+            没有账号? <a href="./register">创建一个</a>
         </div>
     </form>
 </div>

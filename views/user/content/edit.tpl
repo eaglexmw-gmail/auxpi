@@ -111,7 +111,7 @@
 </div>
 
 
-<script src="/static/jquery/3.3.1/jquery.min.js"></script>
+<script src="./static/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
 
@@ -125,7 +125,7 @@
         var token = {"name": "_xsrf", "value": xsrftoken};
         data.push(token);
         $.ajax({
-            url: "/users/{{ .User.ID}}/edit",
+            url: "./users/{{ .User.ID}}/edit",
             type: 'post',
             data: data,
             dataType: 'json',

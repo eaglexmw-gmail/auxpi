@@ -337,8 +337,10 @@ type Auxpi struct {
 	Repositories string `json:"repositories"`
 }
 
+// 软链接拼接URL时，是否以根目录形式拼接，以子目录部署时，RootLink选项如果为TRUE，将会去除SiteUrl的子目录
 type LocalStore struct {
 	Status          bool   `json:"status"`
+	RootLink        bool   `json:"root_link"`
 	StorageLocation string `json:"storage_location"`
 	Link            string `json:"link"`
 }

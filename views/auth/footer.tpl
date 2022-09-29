@@ -1,5 +1,5 @@
-<script src="/static/jquery/3.3.1/jquery.min.js"></script>
-<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="./static/jquery/3.3.1/jquery.min.js"></script>
+<script src="./static/bootstrap/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.2.5/dist/sweetalert2.all.min.js"></script>
 
 <script>
@@ -78,7 +78,7 @@
 
         var login = function (data) {
             $.ajax({
-                url: "/login",
+                url: "./login",
                 type: 'post',
                 data: data,
                 dataType: 'json',
@@ -96,7 +96,7 @@
                         title: "登录成功,即将跳转",
                         showCloseButton: true,
                     }).then(() => {
-                        location.href = "/users/index"
+                        location.href = "./users/index"
                     })
                 },
                 error: function (resp) {
@@ -111,7 +111,7 @@
 
         var register = function (data) {
             $.ajax({
-                url: "/register",
+                url: "./register",
                 type: 'post',
                 data: data,
                 dataType: 'json',
@@ -146,7 +146,7 @@
 
         var forgot = function (data) {
             $.ajax({
-                url: "/forgot",
+                url: "./forgot",
                 type: 'post',
                 data: data,
                 dataType: 'json',
@@ -179,7 +179,7 @@
 
         var reset = function (data) {
             $.ajax({
-                url: '/reset',
+                url: './reset',
                 type: 'post',
                 data: data,
                 dataType: 'json',

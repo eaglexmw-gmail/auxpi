@@ -13,7 +13,12 @@
 
 package controllers
 
-import "github.com/astaxie/beego"
+import (
+	auxpi "github.com/auxpi/auxpiAll"
+	auxpiLog "github.com/auxpi/log"
+	"github.com/auxpi/models"
+	"github.com/astaxie/beego"
+)
 
 type AdminController struct {
 	beego.Controller
@@ -21,5 +26,13 @@ type AdminController struct {
 
 //渲染前端单页面
 func (a *AdminController) Index() {
+	var site = auxpi.SiteBase{}
+	err := site.UnmarshalJSON([]byte(models.GetOption("site_base", "conf")))
+	if err != nil {
+		auxpiLog.SetAWarningLog("CONTROLLER", err)
+	}
+
 	a.TplName = "admin/index.html"
+
+	a.Data["siteUrl"] = site.SiteUrl
 }
