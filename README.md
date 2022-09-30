@@ -86,7 +86,7 @@ https://github.com/aimerforreimu/AUXPI/wiki/%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE
 ```
 ### 全新安装后的初始化
 
-全新安装后，需要进行一些初始化步骤，AuXPI才能正常工作，以下步骤是将AuXPI部署到https://www.example.com/auxpi/为例（如果是https://www.example.com/，则不需要第4步）
+全新安装后，需要进行一些初始化步骤，AuXPI才能正常工作，以下步骤是将AuXPI部署到https://www.example.com/auxpi/ 为例（如果是https://www.example.com/ ，则不需要第4步）
 
 1. 配置中使用sqlite数据库，全新安装后，进入auxpi程序所在目录，执行如下初始流程
 ```bash
