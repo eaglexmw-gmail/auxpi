@@ -126,6 +126,15 @@
                         <el-button round>点我查看配置教程</el-button>
                       </el-row>
                       <el-row>
+                        软路径是否为根路径:
+                        <el-switch
+                          v-model="local.root_link"
+                          active-color="#13ce66"
+                          inactive-color="#ff4949"
+                          style="margin-left:25px"
+                        />
+                      </el-row>
+                      <el-row>
                         <el-input v-model="local.link" placeholder="请输入您的默认链接地址">
                           <template slot="prepend" >
                             <el-tooltip placement="top">

@@ -26,7 +26,7 @@ type PagesController struct {
 }
 
 func (i *PagesController) commonStyle() {
-	un, _ := i.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
+	un, _ := i.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname")
 
 	var site = auxpi.SiteBase{}
 	err := site.UnmarshalJSON([]byte(models.GetOption("site_base", "conf")))

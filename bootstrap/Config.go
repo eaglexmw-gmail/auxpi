@@ -156,7 +156,8 @@ func init() {
 		//upload way Init
 		//本地储存
 		siteconfig.SiteUploadWay.LocalStore.Status = true
-		siteconfig.SiteUploadWay.LocalStore.RootLink = true
+		// 默认为false
+		siteconfig.SiteUploadWay.LocalStore.RootLink = false
 		siteconfig.SiteUploadWay.LocalStore.Link = "/images"
 		siteconfig.SiteUploadWay.LocalStore.StorageLocation = "public/upload"
 

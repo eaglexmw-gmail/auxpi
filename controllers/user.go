@@ -44,7 +44,7 @@ func (u *UsersController) commonStyle() {
 	u.LayoutSections["SiderBar"] = "user/user_sider_bar.tpl"
 	u.LayoutSections["Content"] = "user/content/images.tpl"
 	u.Data["xsrf_token"] = u.XSRFToken()
-	r, _ := u.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "r")
+	r, _ := u.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_r")
 	if r == "admin" {
 		u.Data["IsAdmin"] = true
 	}
@@ -55,7 +55,7 @@ func (u *UsersController) commonStyle() {
 
 func (u *UsersController) Show() {
 	u.commonStyle()
-	uname, _ := u.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
+	uname, _ := u.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname")
 	page, size := utils.GetStringPage(u.Input().Get("page"), u.Input().Get("limit"))
 	user, images, count := models.GetUserImagesByUserName(uname, size, page)
 	tPage, _ := strconv.Atoi(u.Input().Get("page"))
@@ -72,7 +72,7 @@ func (u *UsersController) Show() {
 func (u *UsersController) Edit() {
 	u.commonStyle()
 	u.LayoutSections["Content"] = "user/content/edit.tpl"
-	uname, _ := u.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
+	uname, _ := u.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "AuXPI_uname")
 	user := models.GetUserInfo(uname)
 
 	u.Data["User"] = user
