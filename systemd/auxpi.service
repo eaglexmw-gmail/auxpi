@@ -1,0 +1,18 @@
+[Unit]
+Description=AuXPI image share site.
+After=network.target
+
+[Service]
+Type=simple
+
+User=www-user
+Group=www-user
+
+# Restart server on any problem.
+Restart=on-failure
+RestartSec=5s
+
+ExecStart=/usr/bin/auxpi run
+
+[Install]
+WantedBy=multi-user.target

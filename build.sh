@@ -14,7 +14,7 @@ echo -e "
 #       System Required: CentOS/Debian/Ubuntu/Darwin
 #       Description: AUXPI build
 #       Version: 1.0.0
-#       Author: aimerforreimu
+#       Author: aimerforreimu, eaglexmw
 #       Blog: https://0w0.tn
 #=================================================
 "
@@ -25,10 +25,10 @@ function buildHelp(){
     echo "all [version] [clear] ---- Build all platforms programs"
     echo "tar [version] ---- Tar all platforms programs"
     echo "mac ---- Build mac program"
-    echo "mac ---- Build mac program"
-    echo "mac ---- Build mac program"
-    echo "linux ---- Build windows program"
-    echo "windows ---- Build linux program"
+    echo "linux arm ---- Build arm-v7 linux program"
+    echo "linux arm64 ---- Build arm64 linux program"
+    echo "linux amd64 ---- Build amd64/intel linux program"
+    echo "windows ---- Build windows program"
     echo "clear ---- Delete 'build/' folder"
     echo "help ---- Show help info"
     echo
@@ -38,23 +38,31 @@ function buildAndMove() {
 echo -e "${Info_font_prefix}[INFO:]Begin to compile ${1} program ${Font_suffix} "
 remove $1
 echo -e "${Info_font_prefix}[INFO:]Clear File Done  ${Font_suffix} "
-GOOS=$1 GOARCH=amd64 go  build main.go
+if [ "$2"x = "arm"x ]; then
+  GOOS=$1 GOARCH=arm GOARM=7 go build main.go
+elif [ "$2"x = "arm64"x ]; then
+  GOOS=$1 GOARCH=arm64 GOARM=7 go build main.go
+else
+  GOOS=$1 GOARCH=amd64 go build main.go
+fi
 echo -e "${Info_font_prefix}[INFO:]Build ${1} program done ${Font_suffix} "
 mkdir -p build/$1
 mkdir build/$1/conf
+mkdir build/$1/systemd
 echo -e "${Info_font_prefix}[INFO:]Create folder done ${Font_suffix} "
 if [ "$1"x = "windows"x ] ;then
     mv main.exe build/$1/auxpi.exe
-    else
+else
     mv main build/$1/auxpi
 fi
 
 cp -r static/ build/$1/static/
 cp -r views/ build/$1/views/
 cp -r conf/app.conf build/$1/conf/
+cp -r systemd/auxpi.service build/$1/systemd/
 
 cp LICENSE build/$1/
-cp README.MD build/$1/
+cp README.md build/$1/
 
 echo -e "${Info_font_prefix}[INFO:]Copy file done ${Font_suffix} "
 echo -e "${Info_background_prefix}[INFO:]Done all work! : ) ${Font_suffix} "
@@ -115,13 +123,13 @@ clear=$3
 [ -z $1 ] && action=linux
 case "$action" in
 mac)
-    buildAndMove darwin
+    buildAndMove darwin $2
     ;;
 windows)
-    buildAndMove windows
+    buildAndMove windows $2
     ;;
 linux)
-    buildAndMove linux
+    buildAndMove linux $2
     ;;
 clear)
     clearAll
